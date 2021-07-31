@@ -1,4 +1,4 @@
-from flask import request, make_response, jsonify
+from flask import request, make_response, jsonify, send_file
 from app import app, api, mongo
 from app.utils import DumpData
 from flask_restful import Resource, reqparse
@@ -105,8 +105,9 @@ class Downloads(Resource):
 
         # final step which builds the
         # actual pdf putting together all the elements
-        pdf.build([title, table])
-
-        return jsonify ({"message": "Receipt successfully downloaded", "status": 200})
+        lsr = pdf.build([title, table])
+        
+        return send_file(lsr, as_attachment=True)
+        #return jsonify ({"message": "Receipt successfully downloaded", "status": 200})
 
 api.add_resource(Downloads, '/download/<string:ref>')
