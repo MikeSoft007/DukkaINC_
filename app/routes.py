@@ -107,6 +107,6 @@ class Downloads(Resource):
         # actual pdf putting together all the elements
         pdf.build([title, table])
 
-        return jsonify ({"message": "Receipt successfully downloaded"}), 200
+        return jsonify ({"message": "Receipt successfully downloaded", "status": 200})
 
 api.add_resource(Downloads, '/download/<string:ref>')
