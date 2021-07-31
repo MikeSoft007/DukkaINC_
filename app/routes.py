@@ -64,7 +64,7 @@ class Downloads(Resource):
                 getRef['item'],
                 getRef['amount'],
                 getRef['address'],
-                getRef['phone'],
+                getRef['phone']
             ]
         ]
 
