@@ -57,14 +57,15 @@ class Downloads(Resource):
 
         # data which we are going to display as tables
         DATA = [
-            ["Date", "Name", "Item", "Amount payable (NGN.)", "Address", "Phone"],
+            ["Date", "Name", "Item", "Qty". "Amount payable (NGN.)", "Address", "Phone"],
             [
                 getRef['date'],
                 getRef['name'],
                 getRef['item'],
+                getRef['qty'],
                 getRef['amount'],
                 getRef['address'],
-                getRef['phone']
+                getRef['phone_number']
             ]
         ]
 
