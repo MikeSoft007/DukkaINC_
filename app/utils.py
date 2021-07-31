@@ -22,7 +22,7 @@ class DumpData:
     # def __init__(self, phone):
     #     self.phone = phone
 
-    def send_data(self, name, address, phone, item, qty, price, amount):
+    def send_data(self, name, address, phone, price, item, qty, amount):
         lis = []
         refs = str(uuid.uuid4().int)[:10]
         lis.append(refs)
