@@ -57,7 +57,7 @@ class Downloads(Resource):
 
         # data which we are going to display as tables
         DATA = [
-            ["Date", "Name", "Item", "Qty". "Amount payable (NGN.)", "Address", "Phone"],
+            ["Date", "Name", "Item", "Qty", "Amount payable (NGN.)", "Address", "Phone"],
             [
                 getRef['date'],
                 getRef['name'],
@@ -66,7 +66,7 @@ class Downloads(Resource):
                 getRef['amount'],
                 getRef['address'],
                 getRef['phone_number']
-            ]
+            ],
         ]
 
         # creating a Base Document Template of page size A4
