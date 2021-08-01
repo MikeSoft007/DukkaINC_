@@ -63,7 +63,7 @@ class Downloads(Resource):
         
         filename = "Receipt.txt"
         #save_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'Desktop')
-        save_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+        save_path = os.path.join(os.path.expanduser('~'), './Desktop')
         complete_name = os.path.join(save_path, filename)
         file1 = open(complete_name, "w+")
         file1.write(
