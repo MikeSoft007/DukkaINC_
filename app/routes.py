@@ -70,7 +70,7 @@ class Downloads(Resource):
             {
                 "Name": getRef['name'],
                 "Address": getRef['address'],
-                "Phone": getRef['phone'],
+                "Phone": getRef['phone_number'],
                 "Amount": getRef['amount'],
                 "Date": getRef['date'],
                 "Ref": getRef['transaction_ref']
