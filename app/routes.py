@@ -61,21 +61,34 @@ class Downloads(Resource):
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
 
         
-        filename = "Receipt.txt"
+        filename = "Receipt.html"
         #save_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'Desktop')
         save_path = os.path.join(os.path.expanduser('~'), './Desktop')
         complete_name = os.path.join(save_path, filename)
         file1 = open(complete_name, "w+")
-        file1.write(
-            {
-                "Name": getRef['name'],
-                "Address": getRef['address'],
-                "Phone": getRef['phone_number'],
-                "Amount": getRef['amount'],
-                "Date": getRef['date'],
-                "Ref": getRef['transaction_ref']
-                }
-                )
+        file1.write('''
+        <table>
+  <tr>
+    <th>Name.</th>
+    <th>Address</th>
+    <th>Phone</th>
+    <th>Amount</th>
+    <th>Date</th>
+    <th>Reference</th>
+  </tr>
+  <tr>
+    <td>{}</td>
+    <td>{}</td>
+    <td>{}</td>
+    <td>{}</td>
+    <td>{}</td>
+    <td>{}</td>
+  </tr>
+</table>
+        
+        '''.format(getRef['name'],getRef['address'], getRef['phone_number'], getRef['amount'], getRef['date'], getRef['transaction_ref'])
+            
+    )
 
         return jsonify({"message": "Receipt downloaded in /Desktop", "status": 200})
 
