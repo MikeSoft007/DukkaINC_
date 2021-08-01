@@ -6,9 +6,6 @@ from flask_restful import Resource, reqparse
 import os
 import uuid
 
-UPLOAD_DIRECTORY = "/project/api_uploaded_files"
-if not os.path.exists(UPLOAD_DIRECTORY):
-    os.makedirs(UPLOAD_DIRECTORY)
 
 #geerate unique transcation ref
 lis = []
