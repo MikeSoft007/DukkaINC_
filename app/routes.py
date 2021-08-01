@@ -65,5 +65,6 @@ class Downloads(Resource):
 
         send_csv(c, "Receipt.csv", ["Name", "Address", "Phone", "Amount", "Date", "Transaction_Ref"])
 
+        return jsonify({"message": "Downloaded", "status": 200})
    
 api.add_resource(Downloads, '/download/<string:ref>')
