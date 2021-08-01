@@ -2,11 +2,15 @@ from flask import request, make_response, jsonify, send_file
 from app import app, api, mongo
 from app.utils import DumpData
 from flask_restful import Resource, reqparse
-from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet
+import os
+import uuid
 
+
+#geerate unique transcation ref
+lis = []
+refs = str(uuid.uuid4().int)[:10]
+lis.append(refs)
+token = lis[0]
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -25,7 +29,8 @@ class Generate(Resource):
     parser.add_argument('item', type=str, required=True, help="This cannot be left blank")
     parser.add_argument('qty', type=int, required=True, help="This cannot be left blank")
 
-        
+    
+
     def post(self):
         data = Generate.parser.parse_args()
         if data['price'] < 1 or data['qty'] < 1:
@@ -33,11 +38,11 @@ class Generate(Resource):
 
         pushData = DumpData()
         pushData.send_data(data['name'], data['address'], data['phone_number'],
-                                    data['price'], data['item'], data['qty'], data['price']*data['qty'])
+                                    data['price'], data['item'], data['qty'], data['price']*data['qty'], token)
 
         return jsonify(
             {
-                "Message": "Receipt successfully generated kindly y go to /download endpoint to download receipt",
+                "Message": "Receipt successfully generated REFERENCE: {} kindly use the generated ref and go to /download endpoint to download receipt".format(token),
                 "status":200
             }
         )
@@ -55,60 +60,21 @@ class Downloads(Resource):
         if ' '.join(ref.split()) == '':
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
 
-        # data which we are going to display as tables
-        DATA = [
-            ["Date", "Name", "Item", "Qty", "Amount payable (NGN.)", "Address", "Phone"],
-            [
-                getRef['date'],
-                getRef['name'],
-                getRef['item'],
-                getRef['qty'],
-                getRef['amount'],
-                getRef['address'],
-                getRef['phone_number']
-            ],
-        ]
-
-        # creating a Base Document Template of page size A4
-        pdf = SimpleDocTemplate("receipt.pdf", pagesize=A4)
-
-        # standard stylesheet defined within reportlab itself
-        styles = getSampleStyleSheet()
-
-        # fetching the style of Top level heading (Heading1)
-        title_style = styles["Heading1"]
-
-        # 0: left, 1: center, 2: right
-        title_style.alignment = 1
-
-        # creating the paragraph with
-        # the heading text and passing the styles of it
-        title = Paragraph("DukkaINC", title_style)
-
-        # creates a Table Style object and in it,
-        # defines the styles row wise
-        # the tuples which look like coordinates
-        # are nothing but rows and columns
-        style = TableStyle(
-            [
-                ("BOX", (0, 0), (-1, -1), 1, colors.black),
-                ("GRID", (0, 0), (4, 4), 1, colors.black),
-                ("BACKGROUND", (0, 0), (3, 0), colors.gray),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("BACKGROUND", (0, 1), (-1, -1), colors.beige),
-            ]
-        )
-
-        # creates a table object and passes the style to it
-        table = Table(DATA, style=style)
-
-        # final step which builds the
-        # actual pdf putting together all the elements
-        lsr = pdf.build([title, table])
-        #return send_file("/"+lsr, as_attachment=True)
-        return send_file('/', attachment_filename=lsr)
-
-        #return jsonify ({"message": "Receipt successfully downloaded", "status": 200})
+        
+        filename = "Receipt.txt"
+        #save_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'Desktop')
+        save_path = os.path.join(os.path.expanduser('~'), 'Desktop')
+        complete_name = os.path.join(save_path, filename)
+        file1 = open(complete_name, "w+")
+        file1.write(
+            {
+                "Name": getRef['name'],
+                "Address": getRef['address'],
+                "Phone": getRef['phone'],
+                "Amount": getRef['amount'],
+                "Date": getRef['date'],
+                "Ref": getRef['transaction_ref']
+                }
+                )
 
 api.add_resource(Downloads, '/download/<string:ref>')

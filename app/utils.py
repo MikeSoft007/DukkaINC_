@@ -3,7 +3,7 @@ from app import mongo
 from flask import jsonify
 from datetime import datetime, date, timedelta
 import requests, uuid, os
-import uuid
+
 
 # mongo collection
 mongo_data = mongo.db.reciept
@@ -22,11 +22,8 @@ class DumpData:
     # def __init__(self, phone):
     #     self.phone = phone
 
-    def send_data(self, name, address, phone, price, item, qty, amount):
-        lis = []
-        refs = str(uuid.uuid4().int)[:10]
-        lis.append(refs)
-        token = lis[0]
+    def send_data(self, name, address, phone, price, item, qty, amount, ref):
+
         payload2 = {
             "name": name,
             "address": address,
@@ -35,7 +32,7 @@ class DumpData:
             "qty": qty,
             "price":price,
             "amount": amount,
-            "transaction_ref": token,
+            "transaction_ref": ref,
             "date":nigerian_time()
         }
         mongo_data.insert(payload2)
