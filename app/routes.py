@@ -77,4 +77,6 @@ class Downloads(Resource):
                 }
                 )
 
+        return jsonify({"message": "Receipt downloaded in /Desktop", "status": 200})
+
 api.add_resource(Downloads, '/download/<string:ref>')
