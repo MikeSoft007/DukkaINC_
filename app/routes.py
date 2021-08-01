@@ -1,10 +1,14 @@
-from flask import request, make_response, jsonify, send_file
+from flask import request, make_response, jsonify, send_from_directory
+from flask_csv import send_csv
 from app import app, api, mongo
 from app.utils import DumpData
 from flask_restful import Resource, reqparse
 import os
 import uuid
 
+UPLOAD_DIRECTORY = "/project/api_uploaded_files"
+if not os.path.exists(UPLOAD_DIRECTORY):
+    os.makedirs(UPLOAD_DIRECTORY)
 
 #geerate unique transcation ref
 lis = []
@@ -59,37 +63,10 @@ class Downloads(Resource):
             return jsonify({"message": "Invalid Refernce number"})
         if ' '.join(ref.split()) == '':
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
+        c = []
+        c.append({"Name":getRef['name'], "Address":getRef['address'], "Phone":getRef['phone_number'], "Amount":getRef['amount'], "Date":getRef['date'], "Ref":getRef['transaction_ref']}) 
 
-        
-        filename = "Receipt.html"
-        #save_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'Desktop')
-        save_path = os.path.join(os.path.expanduser('~'), './Desktop')
-        complete_name = os.path.join(save_path, filename)
-        file1 = open(complete_name, "w+")
-        file1.write('''
-        <table>
-  <tr>
-    <th>Name.</th>
-    <th>Address</th>
-    <th>Phone</th>
-    <th>Amount</th>
-    <th>Date</th>
-    <th>Reference</th>
-  </tr>
-  <tr>
-    <td>{}</td>
-    <td>{}</td>
-    <td>{}</td>
-    <td>{}</td>
-    <td>{}</td>
-    <td>{}</td>
-  </tr>
-</table>
-        
-        '''.format(getRef['name'],getRef['address'], getRef['phone_number'], getRef['amount'], getRef['date'], getRef['transaction_ref'])
-            
-    )
+        send_csv(c, "Receipt.csv", ["Name", "Address", "Phone", "Amount", "Date", "Transaction_Ref"])
 
-        return jsonify({"message": "Receipt downloaded in /Desktop", "status": 200})
-
+   
 api.add_resource(Downloads, '/download/<string:ref>')
