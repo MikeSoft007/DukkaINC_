@@ -61,7 +61,7 @@ class Downloads(Resource):
         if ' '.join(ref.split()) == '':
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
         c = []
-        c.append({"Name":getRef['name'], "Address":getRef['address'], "Phone":getRef['phone_number'], "Amount":getRef['amount'], "Date":getRef['date'], "Ref":getRef['transaction_ref']}) 
+        c.append({"Name":getRef['name'], "Address":getRef['address'], "Phone":getRef['phone_number'], "Amount":getRef['amount'], "Date":getRef['date'], "Transaction_Ref":getRef['transaction_ref']}) 
 
         send_csv(c, "Receipt.csv", ["Name", "Address", "Phone", "Amount", "Date", "Transaction_Ref"])
 
