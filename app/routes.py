@@ -3,7 +3,7 @@ from flask_csv import send_csv
 from app import app, api, mongo
 from app.utils import DumpData
 from flask_restful import Resource, reqparse
-import os
+import os, subprocess, platform
 import uuid
 import pdfkit
 
@@ -65,6 +65,13 @@ class Downloads(Resource):
 
         if ' '.join(ref.split()) == '':
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
+
+        if platform.system() == 'Windows':
+            pdfkit_config = pdfkit.configuration( wkhtmltopdf=os.environ.get('WKHTMLTOPDF_PATH', 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'))
+        else:
+            WKHTMLTOPDF_CMD = subprocess.Popen(['which', os.environ.get('WKHTMLTOPDF_PATH', '/app/bin/wkhtmltopdf')], stdout=subprocess.PIPE).communicate()[0].strip()
+        
+        pdfkit_config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_CMD)
         
         name = getRef['name'] 
         address = getRef['address'] 
@@ -74,7 +81,7 @@ class Downloads(Resource):
         ref = getRef['transaction_ref']
 
         html = render_template("report.html", name=name, address=address, phone =phone, amount=amount, date=date, ref=ref)
-        pdf = pdfkit.from_string(html, False)
+        pdf = pdfkit.from_string(html, False, configuration=pdfkit_config)
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
         response.headers["Content-Disposition"] = "inline; filename=output.pdf"
