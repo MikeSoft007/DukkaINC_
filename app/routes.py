@@ -93,6 +93,7 @@ class Downloads(Resource):
         item = getRef['item']
         ref = getRef['transaction_ref']
         qty = getRef['qty']
+        
 
         html = render_template("report.html", name=name, address=address, phone =phone, amount=amount, date=date, ref=ref, item=item, qty=qty)
         pdf = pdfkit.from_string(html, False, configuration=pdfkit_config)
