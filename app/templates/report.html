@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -173,4 +173,61 @@
 			</table>
 		</div>
 	</body>
-</html>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        </head>
+<div id="invoice-POS">
+
+    
+    <center id="top">
+      <div class="logo"></div>
+      <div class="info"> 
+        <h2>DukkaINC</h2>
+      </div><!--End Info-->
+    </center><!--End InvoiceTop-->
+    
+    <div id="mid">
+      <div class="info">
+        <h2>Contact Info</h2>
+        <p> 
+            Name : {{ name }}</br>
+            Address   : {{ address }}</br>
+            Phone   : {{ phone }}</br>
+        </p>
+      </div>
+    </div><!--End Invoice Mid-->
+    
+    <div id="bot">
+
+					<div id="table">
+						<table>
+							<tr class="tabletitle">
+								<td class="item"><h2>Item</h2></td>
+								<td class="Hours"><h2>Qty</h2></td>
+								<td class="Rate"><h2>Amount</h2></td>
+							</tr>
+
+							<tr class="service">
+								<td class="tableitem"><p class="itemtext">{{item}}</p></td>
+								<td class="tableitem"><p class="itemtext">{{ qty }}</p></td>
+								<td class="tableitem"><p class="itemtext"> {{ amout }}</p></td>
+							</tr>
+
+
+						</table>
+					</div><!--End Table-->
+
+					<div id="legalcopy">
+						<p class="legal"><strong>Thank you for your business!</strong>  Payment is expected within 31 days; please process this invoice within that time. There will be a 5% interest charge per month on late invoices. 
+						</p>
+					</div>
+
+				</div><!--End InvoiceBot-->
+  </div><!--End Invoice-->
+</body>
+</html> -->
