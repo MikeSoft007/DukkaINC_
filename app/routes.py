@@ -77,27 +77,15 @@ class Downloads(Resource):
         phone = getRef['phone_number']
         amount = getRef['amount']
         date = getRef['date'] 
+        item = getRef['item']
         ref = getRef['transaction_ref']
 
-        html = render_template("report.html", name=name, address=address, phone =phone, amount=amount, date=date, ref=ref)
+        html = render_template("report.html", name=name, address=address, phone =phone, amount=amount, date=date, ref=ref, item=item)
         pdf = pdfkit.from_string(html, False, configuration=pdfkit_config)
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
         response.headers["Content-Disposition"] = "inline; filename=output.pdf"
         return response
     
-    # def post(self, ref):
 
-    #     getRef = mongo.db.reciept.find_one({"transaction_ref": ref})
-    #     if not getRef :
-    #         return jsonify({"message": "Invalid Refernce number"})
-    #     if ' '.join(ref.split()) == '':
-    #         return jsonify({"message": "Please enter transaction reference number to download reciept"})
-    #     c = []
-    #     c.append({"Name":getRef['name'], "Address":getRef['address'], "Phone":getRef['phone_number'], "Amount":getRef['amount'], "Date":getRef['date'], "Transaction_Ref":getRef['transaction_ref']}) 
-
-    #     send_csv(c, "Receipt.csv", ["Name", "Address", "Phone", "Amount", "Date", "Transaction_Ref"])
-
-    #     return jsonify({"Name":getRef['name'], "Address":getRef['address'], "Phone":getRef['phone_number'], "Amount":getRef['amount'], "Date":getRef['date'], "Transaction_Ref":getRef['transaction_ref'], "status": 200})
-   
 api.add_resource(Downloads, '/download/<string:ref>')
