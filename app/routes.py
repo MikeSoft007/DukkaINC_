@@ -57,10 +57,12 @@ api.add_resource(Generate, '/generate')
 class Downloads(Resource):
 
 
-    def post(self, ref):
+    def get(self, ref):
         getRef = mongo.db.reciept.find_one({"transaction_ref": ref})
+
         if not getRef :
             return jsonify({"message": "Invalid Refernce number"})
+
         if ' '.join(ref.split()) == '':
             return jsonify({"message": "Please enter transaction reference number to download reciept"})
         
