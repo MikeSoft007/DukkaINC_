@@ -117,7 +117,7 @@ def returnval(ref):
         {
             "name":getRef['name'], 
             "address":getRef['address'], 
-            "phone":getRef['phone'], 
+            "phone":getRef['phone_number'], 
             "price":getRef['price'], 
             "item": getRef['item'], 
             "quantity":getRef['qty'], 
