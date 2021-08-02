@@ -99,7 +99,7 @@ class Downloads(Resource):
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
         response.headers["Content-Disposition"] = "inline; filename=output.pdf"
-        returnval(response)
+        returnval(name, address, phone, amount, date, item, ref, qty)
         return response
 
     
