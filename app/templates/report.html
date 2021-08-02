@@ -111,8 +111,8 @@
 								</td>
 
 								<td>
-									Invoice #: { % ref % }<br />
-									Created: { % date %}<br />
+									Invoice #: {{ ref }}<br />
+									Created: {{ date }}<br />
 								</td>
 							</tr>
 						</table>
@@ -128,9 +128,9 @@
 								</td>
 
 								<td>
-									{% name %}<br />
-									{% address %}<br />
-									{% phone %}}
+									{{ name }}<br />
+									{{ address }}<br />
+									{{ phone }}
 								</td>
 							</tr>
 						</table>
@@ -158,17 +158,17 @@
 				</tr>
 
 				<tr class="item">
-					<td>{% item %}</td>
+					<td>{{ item }}</td>
 
-					<td>{% price %}</td>
+					<td>{{ price }}</td>
                     
-                    <td>{% qty %}</td>
+                    <td>{{} qty }}</td>
 
 				</tr>
 				<tr class="total">
 					<td></td>
 
-					<td>Total: {% amount %}</td>
+					<td>Total: {{ amount }}</td>
 				</tr>
 			</table>
 		</div>
