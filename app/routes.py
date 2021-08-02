@@ -23,21 +23,6 @@ def index():
     return response
 
 
-@app.route('/get-receipt', methods=['GET'])
-def returnval(name, address, phone, price, item, qty, amount, ref):
-    return jsonify(
-        {
-            "name":name, 
-            "address":address, 
-            "phone":phone, 
-            "price":price, 
-            "item": item, 
-            "quantity":qty, 
-            "amount": amount,
-            "Reference": ref
-            })
-
-
 def require_key(view_function):
     @wraps(view_function)
     def decorated_function(*args, **kwargs):
@@ -114,11 +99,31 @@ class Downloads(Resource):
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
         response.headers["Content-Disposition"] = "inline; filename=output.pdf"
-        returnval(name, address, phone, amount, date, item, ref, qty)
         return response
 
-    
-
 api.add_resource(Downloads, '/download/<string:ref>')
+
+
+@app.route('/get-receipt/<string:ref>', methods=['GET'])
+def returnval(ref):
+    getRef = mongo.db.reciept.find_one({"transaction_ref": ref})
+
+    if not getRef :
+        return jsonify({"message": "Invalid Refernce number"})
+
+    if ' '.join(ref.split()) == '':
+            return jsonify({"message": "Please enter transaction reference number to download reciept"})
+    return jsonify(
+        {
+            "name":getRef['name'], 
+            "address":getRef['address'], 
+            "phone":getRef['phone'], 
+            "price":getRef['price'], 
+            "item": getRef['item'], 
+            "quantity":getRef['qty'], 
+            "amount": getRef['amount'],
+            "Reference": getRef['transaction_ref'],
+            "status":200
+            })
 
 
