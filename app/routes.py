@@ -29,7 +29,7 @@ def require_key(view_function):
         if request.args.get('x-offense-key') and request.args.get('x-dukka-key') == os.environ.get('DUKKA_KEY'):
             return view_function(*args, **kwargs)
         else:
-            return make_response(jsonify({"message": "Unauthorized access at " + request.url, "status": False}), 403)
+            return make_response(jsonify({"message": "Unauthorized users access at " + request.url, "status": False}), 403)
     return decorated_function
 
 
