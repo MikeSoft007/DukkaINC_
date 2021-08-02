@@ -1,7 +1,7 @@
 from flask import request, make_response, jsonify, url_for, render_template
 from flask_csv import send_csv
 from app import app, api, mongo
-from app.utils import DumpData
+from app.utils import DumpData, returnval
 from flask_restful import Resource, reqparse
 import os, subprocess, platform
 import uuid
@@ -99,7 +99,9 @@ class Downloads(Resource):
         response = make_response(pdf)
         response.headers["Content-Type"] = "application/pdf"
         response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+        returnval(response)
         return response
+
     
 
 api.add_resource(Downloads, '/download/<string:ref>')

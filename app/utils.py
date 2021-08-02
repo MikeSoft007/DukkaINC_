@@ -36,3 +36,17 @@ class DumpData:
             "date":nigerian_time()
         }
         mongo_data.insert(payload2)
+
+def returnval(name, address, phone, price, item, qty, amount, ref):
+    return jsonify(
+        {
+            "name":name, 
+            "address":address, 
+            "phone":phone, 
+            "price":price, 
+            "item": item, 
+            "quantity":qty, 
+            "amount": amount,
+            "Reference": ref
+            })
+
