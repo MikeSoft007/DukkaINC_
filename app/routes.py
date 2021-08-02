@@ -1,7 +1,7 @@
 from flask import request, make_response, jsonify, url_for, render_template
 from flask_csv import send_csv
 from app import app, api, mongo
-from app.utils import DumpData, returnval
+from app.utils import DumpData
 from flask_restful import Resource, reqparse
 import os, subprocess, platform
 import uuid
@@ -21,6 +21,21 @@ def index():
     response = make_response("Test connection ok!")
     response.headers['Content-Type'] = "text/plain"
     return response
+
+
+@app.route('/get-receipt', methods=['GET'])
+def returnval(name, address, phone, price, item, qty, amount, ref):
+    return jsonify(
+        {
+            "name":name, 
+            "address":address, 
+            "phone":phone, 
+            "price":price, 
+            "item": item, 
+            "quantity":qty, 
+            "amount": amount,
+            "Reference": ref
+            })
 
 
 def require_key(view_function):
@@ -105,3 +120,5 @@ class Downloads(Resource):
     
 
 api.add_resource(Downloads, '/download/<string:ref>')
+
+
