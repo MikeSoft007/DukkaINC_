@@ -6,6 +6,7 @@ from flask_restful import Resource, reqparse
 import os, subprocess, platform
 import uuid
 import pdfkit
+from functools import wraps
 
 
 
@@ -22,6 +23,18 @@ def index():
     return response
 
 
+def require_key(view_function):
+    @wraps(view_function)
+    def decorated_function(*args, **kwargs):
+        if request.args.get('x-offense-key') and request.args.get('x-dukka-key') == os.environ.get('DUKKA_KEY'):
+            return view_function(*args, **kwargs)
+        else:
+            return make_response(jsonify({"message": "Unauthorized access at " + request.url, "status": False}), 403)
+    return decorated_function
+
+
+
+
 class Generate(Resource):
 
     parser = reqparse.RequestParser()
@@ -33,7 +46,7 @@ class Generate(Resource):
     parser.add_argument('qty', type=int, required=True, help="This cannot be left blank")
 
     
-
+    @require_key
     def post(self):
         data = Generate.parser.parse_args()
         if data['price'] < 1 or data['qty'] < 1:
